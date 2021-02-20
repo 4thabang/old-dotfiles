@@ -23,7 +23,7 @@ Plug 'sakshamgupta05/vim-todo-highlight'
 Plug 'prettier/vim-prettier', {
       \ 'do': 'yarn install',
       \ 'for': ['javascript', 'typescript', 'typescriptreact', 'javascriptreact']}
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+"Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'yggdroot/indentline'
 Plug 'tpope/vim-eunuch'
 Plug 'airblade/vim-gitgutter'
@@ -32,7 +32,6 @@ Plug 'ryanoasis/vim-devicons'
 
 "-----------------Themes/Colorschemes-----------------"
 
-Plug 'sainnhe/edge'
 Plug 'sainnhe/gruvbox-material'
 Plug 'ghifarit53/tokyonight-vim'
 
@@ -51,6 +50,9 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/playground'
 Plug 'tjdevries/nlua.nvim'
 Plug 'nvim-lua/lsp_extensions.nvim'
+
+" Misc.
+Plug 'mbbill/undotree'
 
 "------------------End of Plugins---------------------"
 call plug#end()
@@ -76,6 +78,7 @@ set go-=m
 set ls=2
 set scrolloff=12
 set signcolumn=yes
+set colorcolumn=80
 set nohlsearch
 set incsearch
 set mouse=
@@ -98,12 +101,16 @@ set noswapfile
 set rtp+=/usr/local/opt/fzf
 
 
-"hi coc virutal text commands
+"Highlight Lsp/CoC virutal text commands
 func! s:my_coc() abort 
-  hi CocErrorVirtualText ctermfg=Red guifg=#ff0000
-  hi CocWarningVirtualText ctermfg=Yellow guifg=#E0AF68
-  hi CocHintVirtualText ctermfg=Green guifg=#9ECE6A
-  hi CocInfoVirtualText ctermfg=Blue guifg=#7AA2F7
+  "hi CocErrorVirtualText ctermfg=Red guifg=#ff0000
+  "hi CocWarningVirtualText ctermfg=Yellow guifg=#E0AF68
+  "hi CocHintVirtualText ctermfg=Green guifg=#9ECE6A
+  "hi CocInfoVirtualText ctermfg=Blue guifg=#7AA2F7
+  hi LspDiagnosticsVirtualTextError ctermfg=Red guifg=#ff0000
+  hi LspDiagnosticsVirtualTextWarning ctermfg=Yellow guifg=#E0AF68
+  hi LspDiagnosticsVirtualTextInformation ctermfg=Blue guifg=#7AA2F7 
+  hi LspDiagnosticsVirtualTextHint ctermfg=Green guifg=#9ECE6A
 endfunc
 
 augroup color_coc | au!
@@ -111,12 +118,12 @@ augroup color_coc | au!
 augroup END
 
 " let
+let mapleader = " "
 let g:go_def_mode='gopls'
 let g:go_info_mode='gopls'
-let mapleader = " "
 
 "let g:airline_theme='onedark'
-let g:airline#extensions#tabline#formatter = 'unique_tail'
+let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_nr_show = 1
@@ -215,7 +222,9 @@ nnoremap <silent> <Leader>s :w<CR>
 nnoremap <Leader>y "*y
 vnoremap <Leader>y "*y
 
-nnoremap <silent> <Leader>h :call CocActionAsync('doHover')<CR>
+"nnoremap <silent> <Leader>h :call CocActionAsync('doHover')<CR>
+
+nnoremap <Leader>ut :UndotreeToggle<CR>
 
 nnoremap <silent> <Leader>n :NERDTreeToggle<CR>
 
