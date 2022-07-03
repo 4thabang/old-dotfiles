@@ -6,9 +6,6 @@ set shortmess+=c
 set updatetime=300
 
 let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
-let g:completion_enable_auto_paren = 1
-
-autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics()
 
 nnoremap <leader>hd :lua vim.lsp.buf.definition()<CR>
 nnoremap <leader>hi :lua vim.lsp.buf.implementation()<CR>
@@ -16,42 +13,171 @@ nnoremap <leader>hr :lua vim.lsp.buf.references()<CR>
 nnoremap <leader>h :lua vim.lsp.buf.hover()<CR>
 nnoremap <leader>hrn :lua vim.lsp.buf.rename()<CR>
 
-lua << EOF
-local on_attach = function(client)
-  require'completion'.on_attach(client)
-end
+lua <<EOF
+local nvim_lsp = require'lspconfig'
 
-require'lspconfig'.rust_analyzer.setup{ on_attach=on_attach }
-require'lspconfig'.tsserver.setup{ on_attach=on_attach }
-require'lspconfig'.gopls.setup{ on_attach=on_attach }
-require'lspconfig'.pyls.setup{ on_attach=on_attach }
+local opts = {
+    tools = { -- rust-tools options
+        autoSetHints = true,
+        hover_with_actions = true,
+        inlay_hints = {
+            show_parameter_hints = false,
+            parameter_hints_prefix = "",
+            other_hints_prefix = "",
+        },
+    },
 
+    server = {
+        settings = {
+            ["rust-analyzer"] = {
+                checkOnSave = {
+                    command = "clippy",
+                },
+            },
+        },
+    },
+}
 
-local function preview_location_callback(_,_, result)
-  if result == nil or vim.tbl_isempty(result) then
-    return nil
-  end
-  vim.lsp.util.preview_location(result[1])
-end
+require('rust-tools').setup(opts)
 
-function PeekDefinition()
-  local params = vim.lsp.util.make_position_params()
-  return vim.lsp.buf_request(0, 'textDocument/definition', prams, preview_location_callback)
-end
+nvim_lsp.gopls.setup {
+  cmd = {"gopls", "serve"},
+  settings = {
+    gopls = {
+      analyses = {
+        unusedparams = true,
+      },
+      staticcheck = true,
+    },
+  },
+}
 
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-  vim.lsp.diagnostic.on_publish_diagnostics, {
-    virtual_text = true,
-    signs = true,
-    update_in_insert = true,
+require'nvim-treesitter.configs'.setup{
+  highlight = {
+    enable = true
   }
-)
+}
+
+require("nvim-tree").setup({
+  filters = {
+    custom = {},
+    dotfiles = true,
+  },
+  
+  open_on_setup = true,
+  open_on_tab = true,
+  disable_netrw = false,
+  hijack_netrw = false,
+
+  actions = {
+    open_file = {
+      quit_on_open = true,
+    },
+  },
+
+  update_focused_file = {
+    enable = true,
+  },
+
+  view = {
+    width = 40,
+    side = "left",
+  },
+
+  renderer = {
+    highlight_git = true,
+    add_trailing = true,
+    group_empty = true,
+    root_folder_modifier = ":~",
+    indent_markers = {
+      enable = true,
+    },
+
+  icons = {
+    show = {
+      file = true,
+      folder = true,
+      git = true,
+    },
+
+    glyphs = {
+      default = '',                                                              
+      symlink = '',                                                              
+      git = {                                                                    
+        unstaged = "✗",                                                           
+        staged = "✓",                                                             
+        unmerged = "",                                                           
+        renamed = "➜",                                                            
+        untracked = "★"                                                           
+      },                                                                         
+      folder = {                                                                  
+        default = "",                                                            
+        open = "",                                                               
+        empty = "",                                                              
+        empty_open = "",                                                         
+        symlink = "",                                                            
+        symlink_open = "", 
+      },
+    },
+  },
+}})
 EOF
 
-"lua require'lspconfig'.yamlls.setup{ on_attach=require'completion'.on_attach }
+lua <<EOF
+local cmp = require'cmp'
 
-"lua require'lspconfig'.jsonls.setup{ on_attach=require'completion'.on_attach }
+local lspkind = require("lspkind")
 
-"lua require'lspconfig'.dockerls.setup{ on_attach=require'completion'.on_attach }
+cmp.setup({
+  -- Enable LSP snippets
+  snippet = {
+    expand = function(args)
+        vim.fn["vsnip#anonymous"](args.body)
+    end,
+  },
 
-"lua require'lspconfig'.cssls.setup{ on_attach=require'completion'.on_attach }
+  formatting = {
+    format = lspkind.cmp_format({
+
+    mode = 'symbol',
+
+    before = function(entry, vim_item)
+
+      -- vim_item.kind = lspkind.presets.default[vim_item.kind]
+
+      vim_item.menu = ({
+            nvim_lsp = "[LSP]",
+            look = "[Dict]",
+            buffer = "[Buffer]",
+          })[entry.source.name]
+      return vim_item
+    end
+    }) 
+  },
+
+  mapping = {
+    ['<C-p>'] = cmp.mapping.select_prev_item(),
+    ['<C-n>'] = cmp.mapping.select_next_item(),
+    -- Add tab support
+    ['<S-Tab>'] = cmp.mapping.select_prev_item(),
+    ['<Tab>'] = cmp.mapping.select_next_item(),
+    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-e>'] = cmp.mapping.close(),
+    ['<CR>'] = cmp.mapping.confirm({
+      behavior = cmp.ConfirmBehavior.Insert,
+      select = true,
+    })
+  },
+
+
+  -- Installed sources
+  sources = {
+    { name = 'nvim_lsp' },
+    { name = 'vsnip' },
+    { name = 'path' },
+    { name = 'buffer' },
+  },
+})
+EOF
