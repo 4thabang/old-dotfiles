@@ -4,7 +4,6 @@
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
-
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -75,7 +74,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-syntax-highlighting)
+plugins=(zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -126,4 +125,8 @@ else
 fi
 unset __conda_setup
 # <<< conda initialize <<<
-
+export PATH=$HOME/go/bin:$PATH
+export PATH=$HOME/.local/bin/rust-analyzer:$PATH
+export PATH=/Users/thabang/.local/bin/rust-analyzer:/Users/thabang/go/bin:/Users/thabang/opt/anaconda3/bin:/Users/thabang/.gem/ruby/2.7.2/bin:/Users/thabang/.rubies/ruby-2.7.2/lib/ruby/gems/2.7.0/bin:/Users/thabang/.rubies/ruby-2.7.2/bin:/Library/Frameworks/Python.framework/Versions/3.9/bin:/Users/thabang/.cargo/bin:/Library/Frameworks/Python.framework/Versions/3.8/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/Library/Apple/usr/bin:/Users/thabang/.cargo/bin:/users/thabang/flutter/bin:/usr/local/sbin
+export PATH="/usr/local/opt/icu4c/bin:$PATH"
+export PATH="/usr/local/opt/icu4c/sbin:$PATH"
