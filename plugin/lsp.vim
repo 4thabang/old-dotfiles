@@ -121,6 +121,10 @@ require("nvim-tree").setup({
     },
   },
 }})
+
+nvim_lsp.yamlls.setup{}
+
+nvim_lsp.bashls.setup{}
 EOF
 
 lua <<EOF
