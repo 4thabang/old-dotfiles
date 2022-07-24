@@ -125,6 +125,12 @@ require("nvim-tree").setup({
 nvim_lsp.yamlls.setup{}
 
 nvim_lsp.bashls.setup{}
+
+nvim_lsp.tsserver.setup{}
+
+nvim_lsp.eslint.setup{}
+
+nvim_lsp.tailwindcss.setup{}
 EOF
 
 lua <<EOF
