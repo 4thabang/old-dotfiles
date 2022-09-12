@@ -17,13 +17,13 @@ Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'Chiel92/vim-autoformat'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'sakshamgupta05/vim-todo-highlight'
-Plug 'prettier/vim-prettier', {
-      \ 'do': 'yarn install',
-      \ 'for': ['javascript', 'typescript', 'typescriptreact', 'javascriptreact']}
+"Plug 'prettier/vim-prettier', {
+      "\ 'do': 'yarn install',
+      "\ 'for': ['javascript', 'typescript', 'typescriptreact', 'javascriptreact']}
 Plug 'yggdroot/indentline'
 Plug 'tpope/vim-eunuch'
 Plug 'airblade/vim-gitgutter'
-Plug 'iamcco/markdown-preview.nvim', {'do': 'cd app & yarn install'}
+"Plug 'iamcco/markdown-preview.nvim', {'do': 'cd app & yarn install'}
 Plug 'ryanoasis/vim-devicons'
 Plug 'tpope/vim-surround'
 
@@ -31,6 +31,7 @@ Plug 'tpope/vim-surround'
 
 Plug 'sainnhe/gruvbox-material'
 Plug 'ghifarit53/tokyonight-vim'
+Plug 'projekt0n/github-nvim-theme', {'branch': 'main'}
 
 "-------------------Lua/0.5.0-------------------------"
 
@@ -129,7 +130,6 @@ let g:go_info_mode='gopls'
 " Rust let commands
 let g:rustfmt_autosave = 1
 
-"let g:airline_theme='onedark'
 let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
@@ -158,14 +158,17 @@ endif
 let g:prettier#autoformat = 0
 
 let g:one_allow_italics=1
-"let g:airline_theme='one'
 let g:airline_powerline_fonts=1
 
 " unicode symbols
-let g:airline_left_sep = '»'
-let g:airline_left_sep = '▶'
-let g:airline_right_sep = '«'
-let g:airline_right_sep = '◀'
+let g:airline_left_sep = ''
+"let g:airline_left_sep = '»'
+let g:airline_left_sep = ''
+"let g:airline_left_sep = '▶'
+let g:airline_right_sep = ''
+"let g:airline_right_sep = '«'
+let g:airline_right_sep = ''
+"let g:airline_right_sep = '◀'
 let g:airline_symbols.linenr = '␊'
 let g:airline_symbols.linenr = '␤'
 let g:airline_symbols.linenr = '¶'
@@ -175,11 +178,11 @@ let g:airline_symbols.paste = 'Þ'
 let g:airline_symbols.paste = '∥'
 let g:airline_symbols.whitespace = 'Ξ'
 
-" airline symbols
-let g:airline_left_sep = ""
-let g:airline_left_alt_sep = ""
-let g:airline_right_sep = ""
-let g:airline_right_alt_sep = ""
+"" airline symbols
+"let g:airline_left_sep = ""
+"let g:airline_left_alt_sep = ""
+"let g:airline_right_sep = ""
+"let g:airline_right_alt_sep = ""
 let g:airline_symbols.branch = ''
 let g:airline_symbols.readonly = ''
 let g:airline_symbols.linenr = ''
@@ -264,7 +267,8 @@ let g:edge_style = 'neon'
 let g:edge_enable_italic = 1
 let g:edge_disable_italic_comment = 1
 
-colorscheme tokyonight
-let g:airline_theme = 'tokyonight'
+colorscheme github_dark
+"colorscheme tokyonight
+let g:airline_theme='tokyonight'
 
 source ~/.go.vimrc
