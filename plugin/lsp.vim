@@ -7,6 +7,7 @@ set updatetime=300
 
 let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
 
+nnoremap <leader>rh :RustHoverActions<CR>
 nnoremap <leader>hd :lua vim.lsp.buf.definition()<CR>
 nnoremap <leader>hi :lua vim.lsp.buf.implementation()<CR>
 nnoremap <leader>hr :lua vim.lsp.buf.references()<CR>
@@ -19,7 +20,6 @@ local nvim_lsp = require'lspconfig'
 local opts = {
     tools = { -- rust-tools options
         autoSetHints = true,
-        hover_with_actions = true,
         inlay_hints = {
             show_parameter_hints = false,
             parameter_hints_prefix = "",
