@@ -1,15 +1,10 @@
 "HerringtonDarkholme/yats.vim vim-plug
 
-"Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-
-"Plug 'junegunn/fzf.vim'
-
 "------------------Start of Plugins-------------------"
 call plug#begin('~/.vim/plugged')
 "-------------------Existing Plugins------------------"
 
 Plug 'wakatime/vim-wakatime'
-"Plug 'preservim/nerdtree'
 Plug 'vim-airline/vim-airline'
 Plug 'preservim/nerdcommenter'
 Plug 'tpope/vim-fugitive'
@@ -17,13 +12,9 @@ Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'Chiel92/vim-autoformat'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'sakshamgupta05/vim-todo-highlight'
-"Plug 'prettier/vim-prettier', {
-      "\ 'do': 'yarn install',
-      "\ 'for': ['javascript', 'typescript', 'typescriptreact', 'javascriptreact']}
 Plug 'yggdroot/indentline'
 Plug 'tpope/vim-eunuch'
 Plug 'airblade/vim-gitgutter'
-"Plug 'iamcco/markdown-preview.nvim', {'do': 'cd app & yarn install'}
 Plug 'ryanoasis/vim-devicons'
 Plug 'tpope/vim-surround'
 
@@ -31,7 +22,6 @@ Plug 'tpope/vim-surround'
 
 Plug 'sainnhe/gruvbox-material'
 Plug 'ghifarit53/tokyonight-vim'
-Plug 'projekt0n/github-nvim-theme', {'branch': 'main'}
 
 "-------------------Lua/0.5.0-------------------------"
 
@@ -58,6 +48,10 @@ Plug 'hrsh7th/cmp-buffer', {'branch': 'main'}
 Plug 'simrat39/rust-tools.nvim'
 Plug 'hrsh7th/vim-vsnip'
 
+" JavaScript, TypeScript, React
+Plug 'jose-elias-alvarez/null-ls.nvim'
+Plug 'MunifTanjim/prettier.nvim'
+
 " Solidity Language Plugin
 Plug 'tomlion/vim-solidity'
 
@@ -65,6 +59,7 @@ Plug 'tomlion/vim-solidity'
 Plug 'mbbill/undotree'
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 Plug 'onsails/lspkind-nvim'
+Plug 'andweeb/presence.nvim'
 
 "------------------End of Plugins---------------------"
 call plug#end()
@@ -190,6 +185,28 @@ let g:airline_symbols.linenr = ''
 let g:NERDTreeQuitOnOpen = 1
 let NERDTreeShowHidden=1
 
+" Discord Presence
+" General options
+let g:presence_auto_update         = 1
+let g:presence_neovim_image_text   = "The One True Text Editor"
+let g:presence_main_image          = "neovim"
+let g:presence_client_id           = "793271441293967371"
+let g:presence_debounce_timeout    = 10
+let g:presence_enable_line_number  = 0
+let g:presence_blacklist           = []
+let g:presence_buttons             = 1
+let g:presence_file_assets         = {}
+let g:presence_show_time           = 1
+
+" Rich Presence text options
+let g:presence_editing_text        = "Editing %s"
+let g:presence_file_explorer_text  = "Browsing %s"
+let g:presence_git_commit_text     = "Committing changes"
+let g:presence_plugin_manager_text = "Managing plugins"
+let g:presence_reading_text        = "Reading %s"
+let g:presence_workspace_text      = "Working on %s"
+let g:presence_line_number_text    = "Line %s out of %s"
+
 autocmd StdinReadPre * let s:std_in=1
 
 " Remap Escape Key
@@ -267,8 +284,7 @@ let g:edge_style = 'neon'
 let g:edge_enable_italic = 1
 let g:edge_disable_italic_comment = 1
 
-colorscheme github_dark
-"colorscheme tokyonight
+colorscheme tokyonight
 let g:airline_theme='tokyonight'
 
 source ~/.go.vimrc
