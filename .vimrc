@@ -5,7 +5,7 @@ call plug#begin('~/.vim/plugged')
 "-------------------Existing Plugins------------------"
 
 Plug 'wakatime/vim-wakatime'
-Plug 'vim-airline/vim-airline'
+"Plug 'vim-airline/vim-airline'
 Plug 'preservim/nerdcommenter'
 Plug 'tpope/vim-fugitive'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
@@ -22,6 +22,10 @@ Plug 'tpope/vim-surround'
 
 Plug 'sainnhe/gruvbox-material'
 Plug 'ghifarit53/tokyonight-vim'
+Plug 'cocopon/iceberg.vim'
+
+Plug 'nvim-lualine/lualine.nvim'
+Plug 'akinsho/bufferline.nvim', { 'tag': 'v3.*' }
 
 "-------------------Lua/0.5.0-------------------------"
 
@@ -47,6 +51,13 @@ Plug 'hrsh7th/cmp-path', {'branch': 'main'}
 Plug 'hrsh7th/cmp-buffer', {'branch': 'main'}
 Plug 'simrat39/rust-tools.nvim'
 Plug 'hrsh7th/vim-vsnip'
+
+" Debugging
+Plug 'mfussenegger/nvim-dap'
+Plug 'leoluz/nvim-dap-go'
+Plug 'rcarriga/nvim-dap-ui'
+Plug 'theHamsta/nvim-dap-virtual-text'
+Plug 'nvim-telescope/telescope-dap.nvim'
 
 " JavaScript, TypeScript, React
 Plug 'jose-elias-alvarez/null-ls.nvim'
@@ -234,7 +245,7 @@ nnoremap <Leader>p O<Esc>
 
 nnoremap <Leader>P :Prettier<CR>
 
-nnoremap <silent> <Leader>s :w<CR>
+nnoremap <silent><Leader>w :w<CR>
 
 nnoremap <Leader>y "*y
 vnoremap <Leader>y "*y
@@ -244,6 +255,8 @@ nnoremap <Leader>ut :UndotreeToggle<CR>
 nnoremap <Leader>t :terminal<CR>
 
 nnoremap <Leader>q :q<CR>
+
+nnoremap <silent> gb :BufferLinePick<CR>
 
 nmap <Leader>gc :Git commit<CR>
 nmap <Leader>gp :Git push<CR>
@@ -284,7 +297,87 @@ let g:edge_style = 'neon'
 let g:edge_enable_italic = 1
 let g:edge_disable_italic_comment = 1
 
-colorscheme tokyonight
-let g:airline_theme='tokyonight'
+lua << END
+local lualine_opts = {
+  options = {
+    icons_enabled = true,
+    theme = 'auto',
+    component_separators = { left = '', right = ''},
+    section_separators = { left = '', right = ''},
+    disabled_filetypes = {
+      statusline = {},
+      winbar = {},
+    },
+    ignore_focus = {},
+    always_divide_middle = true,
+    globalstatus = false,
+    refresh = {
+      statusline = 1000,
+      tabline = 1000,
+      winbar = 1000,
+    }
+  },
+  sections = {
+    lualine_a = {'mode'},
+    lualine_b = {'branch', 'diff', 'diagnostics'},
+    lualine_c = {
+      {
+        'filename',
+        file_status = true,
+        path = 1
+      }
+    },
+    lualine_x = {'encoding', 'fileformat', 'filetype'},
+    lualine_y = {'progress'},
+    lualine_z = {'location'}
+  },
+  inactive_sections = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = {'filename'},
+    lualine_x = {'location'},
+    lualine_y = {},
+    lualine_z = {}
+  },
+  tabline = {},
+  winbar = {},
+  inactive_winbar = {},
+  extensions = {}
+}
+
+require('lualine').setup(lualine_opts)
+
+require('bufferline').setup{
+  options = {
+    buffer_close_icon = '',
+    close_icon = '',
+    diagnostics = 'nvim_lsp',
+    offsets = {
+      {
+          filetype = "NvimTree",
+          text = "File Explorer",
+          text_align = "center" ,
+          separator = false,
+      }
+    },
+
+
+    -- start of diagnostics icons function --
+    diagnostics_indicator = function(count, level, diagnostics_dict, context)
+      local icon = level:match("error") and " " or " "
+      return " " .. icon .. count
+    end,
+    -- end of diagnostics icons function --
+    show_tab_indicators = true,
+  }
+}
+END
+
+let g:onedark_config = {
+    \ 'style': 'darker',
+\}
+
+colorscheme iceberg
+let g:airline_theme='gruvbox'
 
 source ~/.go.vimrc
