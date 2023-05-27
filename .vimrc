@@ -5,7 +5,6 @@ call plug#begin('~/.vim/plugged')
 "-------------------Existing Plugins------------------"
 
 Plug 'wakatime/vim-wakatime'
-Plug 'vim-airline/vim-airline'
 Plug 'preservim/nerdcommenter'
 Plug 'tpope/vim-fugitive'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
@@ -22,6 +21,10 @@ Plug 'tpope/vim-surround'
 
 Plug 'sainnhe/gruvbox-material'
 Plug 'ghifarit53/tokyonight-vim'
+Plug 'cocopon/iceberg.vim'
+
+Plug 'nvim-lualine/lualine.nvim'
+Plug 'akinsho/bufferline.nvim', { 'tag': 'v3.*' }
 
 "-------------------Lua/0.5.0-------------------------"
 
@@ -47,6 +50,14 @@ Plug 'hrsh7th/cmp-path', {'branch': 'main'}
 Plug 'hrsh7th/cmp-buffer', {'branch': 'main'}
 Plug 'simrat39/rust-tools.nvim'
 Plug 'hrsh7th/vim-vsnip'
+
+" Debugging
+Plug 'mfussenegger/nvim-dap'
+Plug 'leoluz/nvim-dap-go'
+Plug 'rcarriga/nvim-dap-ui'
+Plug 'theHamsta/nvim-dap-virtual-text'
+Plug 'nvim-telescope/telescope-dap.nvim'
+Plug 'mxsdev/nvim-dap-vscode-js'
 
 " JavaScript, TypeScript, React
 Plug 'jose-elias-alvarez/null-ls.nvim'
@@ -104,19 +115,6 @@ set noswapfile
 
 set rtp+=/usr/local/opt/fzf
 
-
-"Highlight Lsp/CoC virutal text commands
-func! s:my_coc() abort 
-  hi LspDiagnosticsVirtualTextError ctermfg=Red guifg=#ff0000
-  hi LspDiagnosticsVirtualTextWarning ctermfg=Yellow guifg=#E0AF68
-  hi LspDiagnosticsVirtualTextInformation ctermfg=Blue guifg=#7AA2F7 
-  hi LspDiagnosticsVirtualTextHint ctermfg=Green guifg=#9ECE6A
-endfunc
-
-augroup color_coc | au!
-  au ColorScheme * call s:my_coc()
-augroup END
-
 " let
 let mapleader = " "
 let g:go_def_mode='gopls'
@@ -125,130 +123,33 @@ let g:go_info_mode='gopls'
 " Rust let commands
 let g:rustfmt_autosave = 1
 
-let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
-let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#buffer_nr_show = 1
-let g:coc_global_extensions = [
-      \ 'coc-snippets',
-      \ 'coc-tsserver',
-      \ 'coc-eslint',
-      \ 'coc-prettier',
-      \ 'coc-go',
-      \ 'coc-css',
-      \ 'coc-rls',
-      \ ]
-if isdirectory('./node_modules') && isdirectory('./node_modules/prettier')
-  let g:coc_global_extensions += ['coc-prettier']
-endif
-
-if isdirectory('./node_modules') && isdirectory('./node_modules/eslint')
-  let g:coc_global_extensions += ['coc-eslint']
-endif
-
-if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
-endif
-
 let g:prettier#autoformat = 0
 
 let g:one_allow_italics=1
-let g:airline_powerline_fonts=1
-
-" unicode symbols
-let g:airline_left_sep = ''
-"let g:airline_left_sep = '»'
-let g:airline_left_sep = ''
-"let g:airline_left_sep = '▶'
-let g:airline_right_sep = ''
-"let g:airline_right_sep = '«'
-let g:airline_right_sep = ''
-"let g:airline_right_sep = '◀'
-let g:airline_symbols.linenr = '␊'
-let g:airline_symbols.linenr = '␤'
-let g:airline_symbols.linenr = '¶'
-let g:airline_symbols.branch = '⎇'
-let g:airline_symbols.paste = 'ρ'
-let g:airline_symbols.paste = 'Þ'
-let g:airline_symbols.paste = '∥'
-let g:airline_symbols.whitespace = 'Ξ'
-
-"" airline symbols
-"let g:airline_left_sep = ""
-"let g:airline_left_alt_sep = ""
-"let g:airline_right_sep = ""
-"let g:airline_right_alt_sep = ""
-let g:airline_symbols.branch = ''
-let g:airline_symbols.readonly = ''
-let g:airline_symbols.linenr = ''
-
-let g:NERDTreeQuitOnOpen = 1
-let NERDTreeShowHidden=1
-
-" Discord Presence
-" General options
-let g:presence_auto_update         = 1
-let g:presence_neovim_image_text   = "The One True Text Editor"
-let g:presence_main_image          = "neovim"
-let g:presence_client_id           = "793271441293967371"
-let g:presence_debounce_timeout    = 10
-let g:presence_enable_line_number  = 0
-let g:presence_blacklist           = []
-let g:presence_buttons             = 1
-let g:presence_file_assets         = {}
-let g:presence_show_time           = 1
-
-" Rich Presence text options
-let g:presence_editing_text        = "Editing %s"
-let g:presence_file_explorer_text  = "Browsing %s"
-let g:presence_git_commit_text     = "Committing changes"
-let g:presence_plugin_manager_text = "Managing plugins"
-let g:presence_reading_text        = "Reading %s"
-let g:presence_workspace_text      = "Working on %s"
-let g:presence_line_number_text    = "Line %s out of %s"
-
-autocmd StdinReadPre * let s:std_in=1
 
 " Remap Escape Key
 inoremap jj <Esc>
-
-" Switch Tabs
-nmap <Tab> :bnext<CR>
-nmap <S-Tab> :bprev<CR>
-
-" Vim Surround Keys
-nmap <C-s> ysw
-
-" Resize Vertical Panes
+nnoremap <Tab> :bnext<CR>
+nnoremap <S-Tab> :bprev<CR>
+nnoremap <C-s> ysw
 nnoremap <Leader>+ :vertical resize +5<CR>
 nnoremap <Leader>- :vertical resize -5<CR>
-
-" Remap Commands
 noremap <Leader>k :Autoformat<CR>
 nmap <Leader>d :bd<CR>
 nmap <Leader>bd :bp\|bd #<CR>
-
-" Remapping Keys
 nnoremap <Leader>o o<Esc>
 nnoremap <Leader>p O<Esc>
-
 nnoremap <Leader>P :Prettier<CR>
-
-nnoremap <silent> <Leader>s :w<CR>
-
+nnoremap <silent><Leader>w :w<CR>
 nnoremap <Leader>y "*y
 vnoremap <Leader>y "*y
-
 nnoremap <Leader>ut :UndotreeToggle<CR>
-
 nnoremap <Leader>t :terminal<CR>
-
 nnoremap <Leader>q :q<CR>
-
+nnoremap <silent> gb :BufferLinePick<CR>
 nmap <Leader>gc :Git commit<CR>
 nmap <Leader>gp :Git push<CR>
 nmap <Leader>G :G<CR>
-
 nmap <Leader>md <Plug>MarkdownPreviewToggle
 
 " augroup
@@ -257,34 +158,13 @@ augroup highlight_yank
   autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank({timeout = 40})
 augroup END
 
-" syntax highlighting
-syntax on
-
-nnoremap <leader>n :NvimTreeToggle<CR>
-nnoremap <leader>nr :NvimTreeRefresh<CR>
-nnoremap <leader>nf :NvimTreeFindFile<CR>
-
-set termguicolors " this variable must be enabled for colors to be applied properly
-
-highlight NvimTreeFolderIcon guibg=blue
-
-" Gruvbox material colorscheme settings
-let g:gruvbox_material_background = 'medium'
+set termguicolors " This variable must be enabled for colors to be applied properly
 
 if has('termguicolors')
   set termguicolors
 endif
 
-" Tokyonight colorscheme settings
-let g:tokyonight_style = 'night' " available: night, storm
-let g:tokyonight_enable_italic = 0
-
-" Edge colorscheme settings
-let g:edge_style = 'neon'
-let g:edge_enable_italic = 1
-let g:edge_disable_italic_comment = 1
-
-colorscheme tokyonight
-let g:airline_theme='tokyonight'
+colorscheme iceberg
+let g:airline_theme='gruvbox'
 
 source ~/.go.vimrc
